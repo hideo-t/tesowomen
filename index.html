@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>愛され手相診断｜印刷OK</title>
+  <style>
+    :root{ --bg:#0b0f1a; --card:#121a2b; --ink:#eaf0ff; --muted:#a9b6d6; --acc:#ffd166; --acc2:#7bdff2; }
+    *{ box-sizing:border-box; }
+    body{ margin:0; font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; background: radial-gradient(1200px 800px at 20% 0%, #1a2650 0%, var(--bg) 60%); color:var(--ink); }
+    header{ padding:18px 16px 8px; position:sticky; top:0; backdrop-filter: blur(10px); background: rgba(11,15,26,.55); border-bottom:1px solid rgba(255,255,255,.08); z-index:5;}
+    header h1{ margin:0; font-size:18px; letter-spacing:.02em; }
+    header p{ margin:6px 0 0; color:var(--muted); font-size:12px; }
+
+    .wrap{ max-width:980px; margin:0 auto; padding:14px 12px 40px; display:grid; gap:12px; grid-template-columns: 1fr; }
+    @media (min-width:900px){ .wrap{ grid-template-columns: 1.1fr .9fr; } }
+
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.09); border-radius:14px; padding:14px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+    .card h2{ margin:0 0 10px; font-size:14px; color: #ffffff; display:flex; align-items:center; gap:8px; }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); font-size:12px; color:var(--muted); }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    input[type="text"]{ width:min(380px, 100%); padding:12px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.25); color:var(--ink); outline:none; }
+    input[type="file"]{ width:100%; }
+    .help{ color:var(--muted); font-size:12px; line-height:1.6; margin:8px 0 0; }
+
+    .grid{ display:grid; grid-template-columns: 1fr; gap:10px; }
+    @media (min-width:520px){ .grid{ grid-template-columns: 1fr 1fr; } }
+    .opt{ padding:10px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); display:flex; gap:10px; align-items:flex-start; }
+    .opt input{ transform: translateY(2px); }
+    .opt .t{ font-size:13px; }
+    .opt .d{ font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; }
+    button{ cursor:pointer; border:0; padding:12px 14px; border-radius:12px; font-weight:700; letter-spacing:.02em; }
+    .primary{ background: linear-gradient(90deg, var(--acc), #ff8fab); color:#131725; }
+    .ghost{ background: rgba(255,255,255,.06); color: var(--ink); border:1px solid rgba(255,255,255,.14); }
+    .danger{ background: rgba(255,120,120,.15); color:#ffdede; border:1px solid rgba(255,120,120,.25); }
+
+    .result{ display:none; }
+    .result.show{ display:block; }
+    .hero{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .title{ font-size:18px; margin:0; }
+    .subtitle{ margin:6px 0 0; color:var(--muted); font-size:12px; }
+    .score{ display:flex; gap:10px; align-items:center; }
+    .meter{ width:160px; height:10px; border-radius:999px; background: rgba(255,255,255,.12); overflow:hidden; }
+    .bar{ height:100%; width:50%; background: linear-gradient(90deg, var(--acc2), var(--acc)); }
+    .pill{ padding:8px 12px; border-radius:999px; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); font-size:12px; color:var(--ink); }
+
+    .two{ display:grid; gap:10px; grid-template-columns: 1fr; margin-top:10px; }
+    @media (min-width:700px){ .two{ grid-template-columns: 1fr 1fr; } }
+
+    .k{ font-size:12px; color:var(--muted); }
+    .v{ font-size:13px; line-height:1.7; margin-top:4px; }
+    .callout{ border-left:3px solid var(--acc); padding-left:10px; margin:10px 0 0; color:#fff; }
+    .small{ font-size:11px; color:var(--muted); margin-top:10px; }
+
+    .preview{ display:flex; gap:10px; align-items:flex-start; }
+    .preview img{ max-width:190px; border-radius:12px; border:1px solid rgba(255,255,255,.12); display:none; }
+    .preview .ph{ flex:1; min-width:160px; }
+
+    /* 印刷 */
+    @media print{
+      header, .no-print{ display:none !important; }
+      body{ background:#fff; color:#111; }
+      .card{ box-shadow:none; border:1px solid #ddd; background:#fff; }
+      .badge, .pill{ border:1px solid #ddd; background:#f6f6f6; color:#111; }
+      .meter{ background:#eee; }
+      .bar{ background:#111; }
+      a{ color:#111; text-decoration:none; }
+    }
+  </style>
+</head>
+<body>
+<header class="no-print">
+  <h1>愛され手相診断 🔮（GitHub Pages版）</h1>
+  <p>軽く動く／女性ウケの出力に全振り／結果はそのまま印刷できる</p>
+</header>
+
+<div class="wrap">
+  <section class="card no-print">
+    <h2>① 入力</h2>
+
+    <div class="row">
+      <span class="badge">未来を見るなら右手がおすすめ</span>
+      <span class="badge">左手は「隠れ魅力」</span>
+    </div>
+
+    <div style="margin-top:10px;">
+      <label class="k">ニックネーム（任意）</label><br>
+      <input id="name" type="text" placeholder="例：みゆ / ひでおさんの彼女 など">
+      <div class="help">出力に名前が入ると、「自分の診断」感が増えて満足度が上がるよ。</div>
+    </div>
+
+    <div style="margin-top:12px;" class="preview">
+      <div class="ph">
+        <label class="k">手の写真（任意：解析はしない／結果ページに貼れる）</label><br>
+        <input id="photo" type="file" accept="image/*">
+        <div class="help">“写真が載る＝印刷したときに特別感”が出る。まずはここだけで十分ウケる。</div>
+      </div>
+      <img id="photoPreview" alt="手の写真プレビュー">
+    </div>
+  </section>
+
+  <section class="card no-print">
+    <h2>② チェック（女性が喜ぶ項目に集中）</h2>
+    <div class="grid" id="checks"></div>
+
+    <div class="btns" style="margin-top:12px;">
+      <button class="primary" id="go">診断する</button>
+      <button class="ghost" id="rand">いい感じにチェック（盛る）</button>
+      <button class="danger" id="reset">リセット</button>
+    </div>
+
+    <div class="help">※「盛る」ボタンはバズ用。気分が上がる体験に振り切ってる。</div>
+  </section>
+
+  <section class="card result" id="resultCard">
+    <h2>③ 診断結果（印刷OK）</h2>
+
+    <div class="hero">
+      <div>
+        <p class="title" id="title">称号</p>
+        <p class="subtitle" id="subtitle">サブ</p>
+      </div>
+      <div class="score">
+        <div>
+          <div class="k">愛され指数</div>
+          <div class="meter"><div class="bar" id="bar"></div></div>
+        </div>
+        <div class="pill" id="scorePill">85 / 100</div>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="card" style="padding:12px;">
+        <div class="k">恋愛・結婚</div>
+        <div class="v" id="love"></div>
+        <div class="callout v" id="timing"></div>
+      </div>
+      <div class="card" style="padding:12px;">
+        <div class="k">幸運・成功</div>
+        <div class="v" id="luck"></div>
+        <div class="callout v" id="action"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:12px; margin-top:10px;">
+      <div class="k">あなたの手の写真（任意）</div>
+      <div class="v">
+        <img id="photoResult" style="max-width:260px; border-radius:12px; border:1px solid rgba(255,255,255,.12); display:none;" alt="結果に載る写真">
+        <div class="small" id="photoNote"></div>
+      </div>
+    </div>
+
+    <div class="btns no-print" style="margin-top:12px;">
+      <button class="primary" id="print">印刷する</button>
+      <button class="ghost" id="share">Xシェア文コピー</button>
+    </div>
+
+    <div class="small">
+      ※これはエンタメ診断。気分が上がる方向で読むのが正解。<br>
+      印刷：スマホなら「共有 → プリント」または「印刷 → PDFに保存」もできるよ。
+    </div>
+  </section>
+</div>
+
+<script>
+  // 女性ウケ要素に集中したチェック項目（＝軽い）
+  const ITEMS = [
+    { id:"venusBand",  title:"金星帯（モテ線）がある", desc:"注目されやすく、愛されキャラになりやすい" , w:18 },
+    { id:"sunLine",    title:"太陽線が出ている",         desc:"人気運・成功運。人に応援されるタイプ",       w:16 },
+    { id:"emotionFork",title:"感情線の先が枝分かれ",     desc:"愛情深く、恋が育ちやすい。モテ要素も",       w:14 },
+    { id:"marriageMany",title:"結婚線が2本以上",         desc:"チャンスが複数。選べる立場になりやすい",     w:12 },
+    { id:"marriageDeep",title:"結婚線が濃い/長い",       desc:"真剣なご縁が入りやすい。関係が形になりやすい", w:12 },
+    { id:"loveLine",   title:"恋愛線っぽい線がある",     desc:"運命的な出会いのスイッチが入りやすい",       w:10 },
+    { id:"star",       title:"スター線（星）がある",     desc:"予期せぬ幸運・モテ期が来るサイン（レア）",    w:18, rare:true },
+    { id:"solomon",    title:"ソロモンの星がある",       desc:"カリスマ運・成功運（超レア演出枠）",          w:22, ultra:true },
+    { id:"venusHill",  title:"金星丘がふっくら",         desc:"愛情と生命力。大事にされやすい空気感",        w:10 },
+    { id:"moonHill",   title:"月丘が目立つ",             desc:"不思議な魅力。守ってあげたくなる雰囲気",      w:8 },
+  ];
+
+  const checksEl = document.getElementById("checks");
+  const nameEl = document.getElementById("name");
+  const resultCard = document.getElementById("resultCard");
+
+  function renderChecks(){
+    checksEl.innerHTML = ITEMS.map(it => `
+      <label class="opt">
+        <input type="checkbox" id="${it.id}">
+        <div>
+          <div class="t">${it.title} ${it.ultra ? "👑" : it.rare ? "✨" : ""}</div>
+          <div class="d">${it.desc}</div>
+        </div>
+      </label>
+    `).join("");
+  }
+  renderChecks();
+
+  // 写真プレビュー（解析なし）
+  const photoInput = document.getElementById("photo");
+  const photoPreview = document.getElementById("photoPreview");
+  const photoResult = document.getElementById("photoResult");
+  const photoNote = document.getElementById("photoNote");
+  let photoDataUrl = null;
+
+  photoInput.addEventListener("change", (e)=>{
+    const f = e.target.files?.[0];
+    if(!f){ photoDataUrl=null; photoPreview.style.display="none"; return; }
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      photoDataUrl = reader.result;
+      photoPreview.src = photoDataUrl;
+      photoPreview.style.display = "block";
+    };
+    reader.readAsDataURL(f);
+  });
+
+  function picked(){
+    return ITEMS.filter(it => document.getElementById(it.id)?.checked);
+  }
+
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+  function diagnose(){
+    const nm = (nameEl.value || "あなた").trim();
+    const sel = picked();
+
+    // ベーススコア（盛り気味で気持ちよく）
+    let score = 60;
+    let rareHit = false, ultraHit = false;
+    sel.forEach(it=>{
+      score += it.w;
+      if(it.rare) rareHit = true;
+      if(it.ultra) ultraHit = true;
+    });
+    score = clamp(score, 55, 99);
+
+    // 称号（女性が嬉しい言葉に寄せる）
+    let title = "愛され引力の持ち主";
+    if(ultraHit) title = "運命を回収する女王";
+    else if(rareHit) title = "モテ期を呼ぶ幸運体質";
+    else if(score >= 90) title = "愛されオーラ全開";
+
+    // テキスト生成（褒め → 未来 → 安心 → 行動）
+    const loveParts = [];
+    if(sel.some(x=>x.id==="emotionFork")) loveParts.push("愛情の深さが強み。相手の心をほどくのが上手い。");
+    if(sel.some(x=>x.id==="venusBand"))   loveParts.push("惹きつける魅力がある。頑張らなくても好意が集まりやすい。");
+    if(sel.some(x=>x.id==="marriageMany"))loveParts.push("ご縁の入口が複数あるタイプ。比較して“選べる”運。");
+    if(sel.some(x=>x.id==="marriageDeep"))loveParts.push("関係が形になりやすい。真剣交際に進みやすい流れ。");
+    if(sel.some(x=>x.id==="loveLine"))    loveParts.push("運命的な出会いのスイッチが入りやすい。紹介や偶然に強い。");
+    if(loveParts.length===0) loveParts.push("恋愛は“育てるほど強くなる”タイプ。焦らなくて大丈夫、ちゃんと選べる側。");
+
+    const luckParts = [];
+    if(sel.some(x=>x.id==="sunLine"))     luckParts.push("人気運が味方。人に応援されるほど運が伸びる。");
+    if(sel.some(x=>x.id==="solomon"))     luckParts.push("望むものを引き寄せる力が強い（超レア）。主導権を握ると加速する。");
+    if(sel.some(x=>x.id==="star"))        luckParts.push("予期せぬ幸運が起きやすい。嬉しい偶然を取りこぼさないで。");
+    if(sel.some(x=>x.id==="venusHill"))   luckParts.push("エネルギーがある。愛される土台が強い。");
+    if(sel.some(x=>x.id==="moonHill"))    luckParts.push("雰囲気の魅力が武器。感性の合う人と一気に距離が縮む。");
+    if(luckParts.length===0) luckParts.push("幸運は“人との循環”で伸びる。褒められたら受け取るほど運が上がる。");
+
+    // タイミング（断言しすぎず、期待を作る）
+    const timing = ultraHit
+      ? "直近3〜12ヶ月：人生の流れが切り替わる。恋も仕事も“選択が当たる”時期。"
+      : rareHit
+        ? "直近1〜6ヶ月：モテ期サイン。誘い・紹介・偶然の再会に乗ると一気に進む。"
+        : "直近6〜18ヶ月：関係が育って形になる時期。焦らず“いい人だけ残す”のが正解。";
+
+    // 行動（具体的で軽い）
+    const action = ultraHit
+      ? "次の一手：迷ったら“会う”を選ぶ。会った瞬間に勝てるタイプ。"
+      : rareHit
+        ? "次の一手：誘いは1回だけ乗ってみて。行った先でご縁が繋がる。"
+        : "次の一手：連絡頻度より“会う回数”。短時間でも会うと運が動く。";
+
+    // UI反映
+    document.getElementById("title").textContent = `${nm}の称号：${title}`;
+    document.getElementById("subtitle").textContent = `恋愛・結婚・愛され運に強い、前向き未来型の手相`;
+    document.getElementById("scorePill").textContent = `${score} / 100`;
+    document.getElementById("bar").style.width = `${score}%`;
+    document.getElementById("love").textContent = loveParts.join(" ");
+    document.getElementById("luck").textContent = luckParts.join(" ");
+    document.getElementById("timing").textContent = `💍 未来の流れ：${timing}`;
+    document.getElementById("action").textContent = `✅ 今日からの一手：${action}`;
+
+    // 写真反映（印刷に載る）
+    if(photoDataUrl){
+      photoResult.src = photoDataUrl;
+      photoResult.style.display = "block";
+      photoNote.textContent = "※この写真は端末内で表示しているだけ（サーバー送信なし）。";
+    }else{
+      photoResult.style.display = "none";
+      photoNote.textContent = "写真なしでもOK。印刷はそのままできる。";
+    }
+
+    resultCard.classList.add("show");
+    resultCard.scrollIntoView({ behavior:"smooth", block:"start" });
+
+    // シェア文を作って保持
+    window.__shareText = `【愛され手相診断】${nm}：${title}（愛され指数 ${score}/100）💖\n恋愛・結婚の流れ：${timing}\n#手相占い #恋愛運 #結婚運 #愛され`;
+  }
+
+  document.getElementById("go").addEventListener("click", diagnose);
+
+  document.getElementById("rand").addEventListener("click", ()=>{
+    // “盛る”＝高確率で気持ちいい結果になる
+    ITEMS.forEach(it=>{
+      const cb = document.getElementById(it.id);
+      let p = 0.45;
+      if(it.id==="sunLine" || it.id==="emotionFork") p = 0.62;
+      if(it.rare) p = 0.18;
+      if(it.ultra) p = 0.07;
+      cb.checked = Math.random() < p;
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", ()=>{
+    nameEl.value = "";
+    ITEMS.forEach(it => document.getElementById(it.id).checked = false);
+    resultCard.classList.remove("show");
+    photoInput.value = "";
+    photoDataUrl = null;
+    photoPreview.style.display = "none";
+  });
+
+  document.getElementById("print").addEventListener("click", ()=>{
+    // 印刷はブラウザ機能で最強（PDF保存もできる）
+    window.print();
+  });
+
+  document.getElementById("share").addEventListener("click", async ()=>{
+    const t = window.__shareText || "愛され手相診断してみた #手相占い";
+    try{
+      await navigator.clipboard.writeText(t);
+      alert("シェア文をコピーしたよ！");
+    }catch(e){
+      prompt("コピーできなかったから手動コピーしてね", t);
+    }
+  });
+</script>
+</body>
+</html>
